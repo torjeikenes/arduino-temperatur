@@ -1,26 +1,28 @@
+# Importerer tkinter og pySerial
 from Tkinter import *
 import serial
 
+# Setter ser til aa lese seriedata fra /dev/ttyACM0 
+# og overforingshastighet 9600
 ser = serial.Serial('/dev/ttyACM0', 9600)
 
-
-oldtemp = 0 
+# Lager en label med temperaturen, gradetegn og "C"
 def counter_label(label):
   def count():
-    global oldtemp
     temp = ser.readline().strip()
-    label.config(text = temp + " C"+ u"\N{DEGREE SIGN}" )
-    oldtemp = temp 
+    label.config(text = temp + " " + u"\N{DEGREE SIGN}" + "C"  )
     label.after(1000, count)
   count()
  
- 
+# Gjor klar vinduet
 root = Tk()
-downArrow = PhotoImage(file="downArrow.png")
-root.title("Temperatur")
-label = Label(root, fg="green", font=("Helvetica", 42))
+root.title("Temperatur") # Setter tittel pa vinduet
+label = Label(root, fg="green", font=("Helvetica", 42)) # Setter farge, font og
+                                                        # storelse pa teksten 
 label.pack()
-counter_label(label)
-button = Button(root, text='Stop', width=25, command=root.destroy)
+counter_label(label) # Setter inn teksten ovenifra
+# Legger til en knapp som lukker programmet
+button = Button(root, text='Stop', width=25, command=root.destroy) 
 button.pack()
+# Apner vinduet
 root.mainloop()
